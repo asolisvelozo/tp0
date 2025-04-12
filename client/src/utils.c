@@ -30,6 +30,7 @@ int crear_conexion(char *ip, char* puerto)
 
 	// Ahora vamos a crear el socket.
 	int socket_cliente = 0;
+	
 
 	// Ahora que tenemos el socket, vamos a conectarlo
 
