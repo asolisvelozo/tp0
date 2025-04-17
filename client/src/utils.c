@@ -31,8 +31,22 @@ int crear_conexion(char *ip, char* puerto)
 	// Ahora vamos a crear el socket.
 	int socket_cliente = 0;
 	
+	socket_cliente = socket(server_info->ai_family,
+                         server_info->ai_socktype,
+                         server_info->ai_protocol);
+
+
 
 	// Ahora que tenemos el socket, vamos a conectarlo
+
+	if (connect(socket_cliente, server_info->ai_addr, server_info->ai_addrlen) < 0) {
+        perror("Error en connect");
+        close(socket_cliente);
+        freeaddrinfo(server_info);
+        return -1;
+    }else{
+		printf("funca");
+	}
 
 
 	freeaddrinfo(server_info);
@@ -54,8 +68,11 @@ void enviar_mensaje(char* mensaje, int socket_cliente)
 
 	void* a_enviar = serializar_paquete(paquete, bytes);
 
-	send(socket_cliente, a_enviar, bytes, 0);
+	//send(socket_cliente, a_enviar, bytes, 0);
 
+	if (send(socket_cliente, a_enviar, bytes, 0) == -1) {
+    perror("Error al enviar mensaje");
+	}
 	free(a_enviar);
 	eliminar_paquete(paquete);
 }
